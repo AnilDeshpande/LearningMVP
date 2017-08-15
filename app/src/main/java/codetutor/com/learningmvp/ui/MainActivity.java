@@ -16,6 +16,7 @@ import codetutor.com.learningmvp.BuildConfig;
 import codetutor.com.learningmvp.R;
 import codetutor.com.learningmvp.login.ILoginView;
 import codetutor.com.learningmvp.login.LoginPresenter;
+import codetutor.com.learningmvp.ui.fragments.RepoListFragment;
 
 public class MainActivity extends AppCompatActivity implements ILoginView{
 
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements ILoginView{
     public void navigateToListActivity() {
         progressDialog.dismiss();
         Toast.makeText(this,"Login Success!!",Toast.LENGTH_LONG).show();
-        Intent i = new Intent(this, RepoListActivity.class);
+        Intent i = new Intent(this, RepoListFragmentActivity.class);
         i.putExtra("userName", editTextEmailId.getText().toString());
         startActivity(i);
     }

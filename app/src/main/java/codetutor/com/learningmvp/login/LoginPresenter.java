@@ -1,5 +1,7 @@
 package codetutor.com.learningmvp.login;
 
+import java.lang.ref.WeakReference;
+
 import codetutor.com.learningmvp.login.async.AsynchronousInteractor;
 
 /**
@@ -8,11 +10,11 @@ import codetutor.com.learningmvp.login.async.AsynchronousInteractor;
 
 public class LoginPresenter implements ILoginPresenter, OnLoginFinishedListener{
 
-    private ILoginView iLoginView;
+    private WeakReference<ILoginView> iLoginView;
     private AsynchronousInteractor interactor;
 
     public LoginPresenter(ILoginView iLoginView){
-        this.iLoginView = iLoginView;
+        this.iLoginView = new WeakReference<ILoginView>(iLoginView);
         this.interactor = new AsynchronousInteractor();
     }
 
@@ -22,11 +24,16 @@ public class LoginPresenter implements ILoginPresenter, OnLoginFinishedListener{
 
     @Override
     public void onError() {
-        iLoginView.loginFailed();
+        if(iLoginView.get()!=null){
+            iLoginView.get().loginFailed();
+        }
+
     }
 
     @Override
     public void onSuccess() {
-        iLoginView.navigateToListActivity();
+        if(iLoginView.get()!=null){
+            iLoginView.get().navigateToListActivity();
+        }
     }
 }

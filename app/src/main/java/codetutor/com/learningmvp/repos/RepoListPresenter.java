@@ -1,5 +1,6 @@
 package codetutor.com.learningmvp.repos;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import codetutor.com.learningmvp.models.Repo;
@@ -12,23 +13,28 @@ import retrofit.client.Response;
 
 public class RepoListPresenter implements IRepoListPresenter, OnRepoInteractorFinishedListener {
 
-    private IRepoListView view;
+    private WeakReference<IRepoListView> view;
     private RepoListInteractor interactor;
 
     public RepoListPresenter(IRepoListView view){
-        this.view=view;
+        this.view=new WeakReference<IRepoListView>(view);
         this.interactor = new RepoListInteractor(this);
 
     }
 
     @Override
     public void onNetworkError(RetrofitError retrofitError) {
-        view.onReposLoadedFailure(retrofitError);
+        if(view.get()!=null){
+            view.get().onReposLoadedFailure(retrofitError);
+        }
     }
 
     @Override
     public void onNetworkSuccess(List<Repo> list, Response response) {
-        view.onReposLoadedSuccess(list,response);
+        if(view.get()!=null){
+            view.get().onReposLoadedSuccess(list,response);
+        }
+
     }
 
     @Override
